@@ -1,3 +1,4 @@
+
 # SharpHound Offline Build Environment
 
 This project provides a **Docker-based offline build environment** for the [SharpHound](https://github.com/BloodHoundAD/SharpHound) project and its shared library `SharpHoundCommon`. It is designed for **air-gapped or restricted environments** where internet access is not available during build time.
@@ -79,6 +80,17 @@ echo "[+] Build complete. Output located in: $OUTPUT_DIR"
 ## 📦 Output
 
 After the build completes, the compiled binaries will be available in the `BuildBinary/` directory on the host machine.
+
+
+---
+
+## ⚠️ Important Notice
+
+This project **does not include the source code for SharpHound or SharpHoundCommon**.  
+You must **manually download the original source code** from the official repositories.
+
+This repository only provides an **automated offline build environment**.
+
 
 ---
 
