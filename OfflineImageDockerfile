@@ -1,0 +1,24 @@
+# Use official .NET SDK 8.0 as the base image
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+
+# Set working directory
+WORKDIR /build
+
+# Copy project files
+COPY SharpHound/ SharpHound/
+COPY SharpHoundCommon/ SharpHoundCommon/
+
+# Restore NuGet packages to a local offline folder
+RUN dotnet restore SharpHound/Sharphound.sln --packages /nuget-packages
+RUN dotnet restore SharpHoundCommon/SharpHoundCommon.sln --packages /nuget-packages
+
+# Optionally clean up source folders to reduce image size
+RUN rm -rf /build/SharpHound
+RUN rm -rf /build/SharpHoundCommon
+
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set the default entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
