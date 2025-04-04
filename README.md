@@ -31,17 +31,40 @@ docker build -t shc-offline-build --no-cache --network=host --file OfflineImageD
 
 ## ⚙️ Build Usage
 
-Once the image is built, run the following to build SharpHound:
+You can build the project using the `buildexe.sh` script:
 
 ```bash
+#!/bin/bash
+
+# ================================
+# SharpHound Offline Build Script
+# ================================
+
+# Define build parameters
+IMAGE_NAME="shc-offline-build"
+DOCKERFILE="OfflineImageDockerfile"
+OUTPUT_DIR="./BuildBinary"
+CONFIGURATION="Debug"
+
+# Build the Docker image (restores NuGet packages)
+echo "[*] Building Docker image: $IMAGE_NAME"
+docker build -t "$IMAGE_NAME" \
+    --no-cache \
+    --network=host \
+    --file "$DOCKERFILE" .
+
+# Run the container to build the binaries
+echo "[*] Running container to build SharpHound..."
 docker run --rm \
-    -v .:/source \
-    -v ./BuildBinary:/BuildBinary \
-    shc-offline-build \
+    -v "$(pwd)":/source \
+    -v "$OUTPUT_DIR":/BuildBinary \
+    "$IMAGE_NAME" \
     --common-dir /source/SharpHoundCommon \
     --sharp-dir /source/SharpHound \
     --output-dir /BuildBinary \
-    --config Debug
+    --config "$CONFIGURATION"
+
+echo "[+] Build complete. Output located in: $OUTPUT_DIR"
 ```
 
 ### Arguments (passed to `entrypoint.sh`):
